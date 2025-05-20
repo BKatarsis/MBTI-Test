@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Tes MBTI - BK Katarsis</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
+    h1 { color: #333; }
+    .question { margin-bottom: 15px; padding: 10px; background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    .question p { margin: 0 0 5px; }
+    .result { margin-top: 20px; padding: 15px; background: #e6ffe6; border: 1px solid #b2ffb2; border-radius: 8px; }
+    button { padding: 10px 20px; border: none; background: #4caf50; color: white; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #45a049; }
+  </style>
+</head>
+<body>
+  <h1>Mini Tes MBTI - BK Katarsis</h1>
+  <form id="mbtiForm">
+    <div id="questions"></div>
+    <button type="submit">Lihat Hasil</button>
+  </form>
+  <div id="result" class="result" style="display:none;"></div>
+
+  <script>
+    const questions = [
+      // E vs I
+      ["Saya merasa berenergi setelah menghabiskan waktu bersama banyak orang.", "E", "I"],
+      ["Saya lebih suka berpikir dalam diam daripada membicarakan ide saya.", "I", "E"],
+      ["Saya senang berada di lingkungan yang ramai dan dinamis.", "E", "I"],
+      ["Saya butuh waktu sendiri untuk mengisi ulang energi saya.", "I", "E"],
+      ["Saya sering memulai percakapan dengan orang asing.", "E", "I"],
+      ["Saya merasa lelah setelah banyak bersosialisasi.", "I", "E"],
+      ["Saya berpikir sambil berbicara.", "E", "I"],
+      ["Saya menyusun ide-ide saya lebih baik saat menulis daripada berbicara.", "I", "E"],
+      ["Saya merasa nyaman menjadi pusat perhatian.", "E", "I"],
+      ["Saya lebih suka mengamati daripada menjadi bagian aktif dari suatu kegiatan sosial.", "I", "E"],
+
+      // S vs N
+      ["Saya lebih percaya pada pengalaman nyata daripada teori.", "S", "N"],
+      ["Saya tertarik pada makna simbolis dan kemungkinan masa depan.", "N", "S"],
+      ["Saya memperhatikan detail kecil yang sering dilewatkan orang lain.", "S", "N"],
+      ["Saya senang memikirkan 'bagaimana jika' dan ide-ide abstrak.", "N", "S"],
+      ["Saya lebih suka fakta konkret daripada ide spekulatif.", "S", "N"],
+      ["Saya sering membayangkan hal-hal yang belum pernah terjadi.", "N", "S"],
+      ["Saya lebih nyaman mengikuti langkah-langkah yang sudah terbukti.", "S", "N"],
+      ["Saya cenderung melihat pola dalam kejadian sehari-hari.", "N", "S"],
+      ["Saya memperhatikan apa yang nyata dan praktis.", "S", "N"],
+      ["Saya lebih tertarik pada kemungkinan dan inspirasi daripada kenyataan saat ini.", "N", "S"],
+
+      // T vs F
+      ["Saya mengambil keputusan berdasarkan logika dan analisis.", "T", "F"],
+      ["Saya mempertimbangkan perasaan orang lain sebelum memutuskan sesuatu.", "F", "T"],
+      ["Saya lebih menghargai keadilan daripada belas kasihan.", "T", "F"],
+      ["Saya lebih memilih harmoni dalam hubungan daripada benar secara logika.", "F", "T"],
+      ["Saya memisahkan emosi dari keputusan penting.", "T", "F"],
+      ["Saya sering merasa tidak nyaman jika harus menyakiti perasaan orang lain, meskipun saya benar.", "F", "T"],
+      ["Saya menyukai diskusi yang menantang secara intelektual.", "T", "F"],
+      ["Saya mudah terpengaruh oleh nilai-nilai dan keyakinan pribadi.", "F", "T"],
+      ["Saya percaya bahwa yang benar adalah benar, meskipun menyakitkan.", "T", "F"],
+      ["Saya lebih memikirkan dampak keputusan terhadap orang-orang terdekat.", "F", "T"],
+
+      // J vs P
+      ["Saya suka membuat rencana dan menjalaninya secara teratur.", "J", "P"],
+      ["Saya lebih suka fleksibilitas dan spontanitas dalam hidup saya.", "P", "J"],
+      ["Saya merasa nyaman ketika semuanya sudah diputuskan sebelumnya.", "J", "P"],
+      ["Saya merasa terbebani oleh struktur yang terlalu kaku.", "P", "J"],
+      ["Saya biasanya menyelesaikan tugas sebelum tenggat waktu.", "J", "P"],
+      ["Saya cenderung menunda-nunda hingga batas waktu.", "P", "J"],
+      ["Saya merasa tidak nyaman jika segala sesuatu tidak terorganisir.", "J", "P"],
+      ["Saya mudah menyesuaikan diri dengan perubahan yang mendadak.", "P", "J"],
+      ["Saya lebih suka menyelesaikan sesuatu sebelum memulai yang baru.", "J", "P"],
+      ["Saya sering memulai banyak hal tapi tidak semuanya selesai.", "P", "J"]
+    ];
+
+    const container = document.getElementById('questions');
+    questions.forEach((q, i) => {
+      const div = document.createElement('div');
+      div.classList.add('question');
+      div.innerHTML = `
+        <p>${i+1}. ${q[0]}</p>
+        <label><input type="radio" name="q${i}" value="${q[1]}"> Sangat Setuju</label>
+        <label><input type="radio" name="q${i}" value="${q[1]}"> Setuju</label>
+        <label><input type="radio" name="q${i}" value=""> Netral</label>
+        <label><input type="radio" name="q${i}" value="${q[2]}"> Tidak Setuju</label>
+        <label><input type="radio" name="q${i}" value="${q[2]}"> Sangat Tidak Setuju</label>
+      `;
+      container.appendChild(div);
+    });
+
+    document.getElementById('mbtiForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const counts = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+
+      for (let [_, value] of formData.entries()) {
+        if (value) counts[value]++;
+      }
+
+      const result = [
+        counts.E >= counts.I ? 'E' : 'I',
+        counts.S >= counts.N ? 'S' : 'N',
+        counts.T >= counts.F ? 'T' : 'F',
+        counts.J >= counts.P ? 'J' : 'P'
+      ].join('');
+
+      document.getElementById('result').style.display = 'block';
+      document.getElementById('result').innerText = `Hasil MBTI Anda: ${result}`;
+    });
+  </script>
+</body>
+</html>
